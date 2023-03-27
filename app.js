@@ -9,7 +9,7 @@ const passportConfig = require("./passport");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
-const { Sequelize } = require("sequelize");
+const { sequelize } = require("sequelize");
 const passport = require("passport");
 const app = express();
 passportConfig();
