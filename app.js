@@ -9,10 +9,9 @@ const passportConfig = require("./passport");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
-const { sequelize } = require("sequelize");
 const passport = require("passport");
 const app = express();
-passportConfig();
+// passportConfig();
 
 app.set("port", process.env.PORT || 8001);
 sequelize
@@ -40,7 +39,10 @@ app.use(
   })
 );
 app.use(passport.initialize());
-app.use(passport.session);
+app.use(passport.session());
+app.get("/sample", (req, res, next) => {
+  console.log("sample요청 들어옴");
+});
 app.use("/auth", authRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method},${req.url} 라우터 없음`);
