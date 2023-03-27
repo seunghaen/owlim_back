@@ -4,6 +4,7 @@ const google = require("./googleStrategy.js");
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
+    console.log("serializeUser");
     done(null, user.id);
   });
   passport.deserializeUser((id, done) => {

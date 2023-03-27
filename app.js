@@ -11,7 +11,7 @@ dotenv.config();
 const authRouter = require("./routes/auth");
 const passport = require("passport");
 const app = express();
-// passportConfig();
+passportConfig();
 
 app.set("port", process.env.PORT || 8001);
 sequelize
