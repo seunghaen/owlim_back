@@ -5,13 +5,15 @@ const session = require("express-session");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { sequelize } = require("./models");
-
+const passportConfig = require("./passport");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
 const { Sequelize } = require("sequelize");
-
+const passport = require("passport");
 const app = express();
+passportConfig();
+
 app.set("port", process.env.PORT || 8001);
 sequelize
   .sync({ force: false })
@@ -37,6 +39,8 @@ app.use(
     },
   })
 );
+app.use(passport.initialize());
+app.use(passport.session);
 app.use("/auth", authRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method},${req.url} 라우터 없음`);
