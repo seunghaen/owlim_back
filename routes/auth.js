@@ -12,7 +12,7 @@ router.get(
     failureRedirect: "/?loginError=구글로그인실패",
   }),
   (req, res, next) => {
-    res.send("success");
+    res.redirect("http://localhost:3000");
   }
 );
 

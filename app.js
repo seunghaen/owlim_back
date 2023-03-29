@@ -12,7 +12,6 @@ const authRouter = require("./routes/auth");
 const passport = require("passport");
 const app = express();
 passportConfig();
-
 app.set("port", process.env.PORT || 8001);
 sequelize
   .sync({ force: false })
@@ -40,10 +39,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.get("/sample", (req, res, next) => {
-  console.log("sample요청 들어옴");
+app.get("/api/sample", (req, res) => {
+  console.log(req.user);
+  res.send("ㅎㅇ");
 });
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method},${req.url} 라우터 없음`);
   error.status = 404;
