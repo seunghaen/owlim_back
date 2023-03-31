@@ -6,12 +6,20 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
+const cors = require("cors");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
 const passport = require("passport");
 const app = express();
 passportConfig();
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 app.set("port", process.env.PORT || 8001);
 sequelize
   .sync({ force: false })
@@ -39,11 +47,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.get("/api/sample", (req, res) => {
-  console.log(req.user);
+app.get("/sample", (req, res) => {
+  console.log("req.user", req.user);
   res.send("ㅎㅇ");
 });
-app.use("/api/auth", authRouter);
+app.use("/auth", authRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method},${req.url} 라우터 없음`);
   error.status = 404;
