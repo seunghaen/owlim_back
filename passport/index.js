@@ -1,6 +1,7 @@
 const passport = require("passport");
 const User = require("../models/user");
 const google = require("./googleStrategy.js");
+const local = require("./localStrategy");
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
@@ -12,5 +13,6 @@ module.exports = () => {
       .then((user) => done(null, user))
       .catch((err) => done(err));
   });
+  local();
   google();
 };

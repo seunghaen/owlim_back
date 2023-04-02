@@ -26,6 +26,10 @@ class User extends Sequelize.Model {
           type: Sequelize.STRING(30),
           allowNull: true,
         },
+        accessToken: {
+          type: Sequelize.STRING(300),
+          allowNull: false,
+        },
       },
       {
         sequelize,

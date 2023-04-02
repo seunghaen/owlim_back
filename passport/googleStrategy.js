@@ -12,7 +12,7 @@ module.exports = () => {
         passReqToCallback: true,
       },
       async (req, accessToken, refreshToken, profile, done) => {
-        console.log("profile", profile);
+        console.log("accessToken", accessToken);
         try {
           const exUser = await User.findOne({
             where: { snsId: profile.id, provider: "google" },
@@ -25,6 +25,7 @@ module.exports = () => {
               nick: profile.displayName,
               snsId: profile.id,
               provider: profile.provider,
+              accessToken: accessToken,
             });
             done(null, newUser);
           }

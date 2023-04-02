@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 const cors = require("cors");
+const axios = require("axios");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
@@ -22,7 +23,7 @@ app.use(
 );
 app.set("port", process.env.PORT || 8001);
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     console.log("데이터베이스 연결");
   })
@@ -47,9 +48,18 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.get("/sample", (req, res) => {
+app.get("/sample", async (req, res, next) => {
   console.log("req.user", req.user);
-  res.send("ㅎㅇ");
+  try {
+    const result = await axios.get(
+      "https://www.googleapis.com/gmail/v1/users/me/messages?q=from:miricanvas@miricanvas.com",
+      { headers: { Authorization: `Bearer ${req.user.accessToken}` } }
+    );
+    console.log(result);
+    res.send("ㅎㅇ");
+  } catch (error) {
+    next(error);
+  }
 });
 app.use("/auth", authRouter);
 app.use((req, res, next) => {
