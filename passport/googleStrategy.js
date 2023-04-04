@@ -21,11 +21,10 @@ module.exports = () => {
             done(null, exUser);
           } else {
             const newUser = await User.create({
-              email: profile.email,
+              loginId: profile.email,
               nick: profile.displayName,
               snsId: profile.id,
               provider: profile.provider,
-              accessToken: accessToken,
             });
             done(null, newUser);
           }

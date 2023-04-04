@@ -4,7 +4,7 @@ class User extends Sequelize.Model {
   static initiate(sequelize) {
     User.init(
       {
-        email: {
+        loginId: {
           type: Sequelize.STRING(40),
           allowNull: true,
           unique: true,
@@ -25,10 +25,6 @@ class User extends Sequelize.Model {
         snsId: {
           type: Sequelize.STRING(30),
           allowNull: true,
-        },
-        accessToken: {
-          type: Sequelize.STRING(300),
-          allowNull: false,
         },
       },
       {
