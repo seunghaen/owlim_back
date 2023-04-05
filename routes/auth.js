@@ -19,11 +19,7 @@ router.get("/logout", isLoggedIn, logout);
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: [
-      "email",
-      "profile",
-      "https://www.googleapis.com/auth/gmail.settings.basic",
-    ],
+    scope: ["email", "profile"],
   })
 );
 router.get(

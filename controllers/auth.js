@@ -26,8 +26,8 @@ exports.join = async (req, res, next) => {
   }
 };
 
-exports.login = (req, res, next) => {
-  passport.authenticate("local", (authError, user, info) => {
+exports.login = async (req, res, next) => {
+  passport.authenticate("jwt", (authError, user, info) => {
     if (authError) {
       console.error(authError);
       return next(authError);
