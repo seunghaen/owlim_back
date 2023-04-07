@@ -1,21 +1,18 @@
 const passport = require("passport");
-const JWTStrategy = require("passport-local").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
+const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
 
 module.exports = () => {
-  const jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
   passport.use(
-    new JWTStrategy(
+    new LocalStrategy(
       {
+        usernameField: "loginId",
+        passwordField: "password",
         passReqToCallback: false,
-        jwtFromRequest,
-        secretOrKey: process.env.JWT_SECRET_OR_KEY,
       },
-      async (jwtPayload, done) => {
-        const { loginId, password } = jwtPayload;
+      async (loginId, password, done) => {
         try {
           const exUser = await User.findOne({ where: { loginId } });
           if (exUser) {

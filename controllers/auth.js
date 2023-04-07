@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 exports.join = async (req, res, next) => {
   const { loginId, nick, password } = req.body;
@@ -26,26 +27,34 @@ exports.join = async (req, res, next) => {
   }
 };
 
-exports.login = async (req, res, next) => {
-  passport.authenticate("jwt", (authError, user, info) => {
-    if (authError) {
-      console.error(authError);
-      return next(authError);
+exports.login = (req, res, next) => {
+  passport.authenticate("local", (error, user, info) => {
+    if (error) {
+      console.error(err);
+      next(err);
     }
     if (!user) {
-      return res.status(400).send("존재하지 않는 유저");
-    }
-    return req.login(user, (loginError) => {
-      if (loginError) {
-        console.error(loginError);
-        return next(loginError);
-      }
-      return res.status(200).json({
-        code: 200,
-        message: "로그인 성공",
+      res.status(401).json({
+        message: info.meessage,
       });
+    }
+    const refreshToken = jwt.sign(
+      { sub: "refresh", email: req.body.email },
+      process.env.JWT_SECRET_OR_KEY,
+      { expiresIn: "24h" }
+    );
+    const accessToken = jwt.sign(
+      { sub: "access", email: req.body.email },
+      process.env.JWT_SECRET_OR_KEY,
+      { expiresIn: "5m" }
+    );
+    res.status(200).json({
+      nick: user.nick,
+      loginId: user.loginId,
+      accessToken,
+      refreshToken,
     });
-  })(req, res, next);
+  });
 };
 
 exports.logout = (req, res) => {

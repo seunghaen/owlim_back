@@ -9,21 +9,3 @@ exports.isValidToken = (token) => {
     return false;
   }
 };
-
-exports.retrieveToken = (headers) => {
-  if (headers && headers.authorization) {
-    const tokens = headers.authorization.split(" ");
-    if (tokens && tokens.length === 2) {
-      return tokens[1];
-    } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
-};
-
-exports.AuthUtils = {
-  isValidToken,
-  retrieveToken,
-};
