@@ -23,7 +23,10 @@ class Mail extends Sequelize.Model {
     );
   }
 
-  static associate(db) {}
+  static associate(db) {
+    db.Mail.belongsTo(db.Letter);
+    db.Mail.belongsTo(db.User);
+  }
 }
 
 module.exports = Mail;

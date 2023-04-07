@@ -23,7 +23,10 @@ class Letter extends Sequelize.Model {
     );
   }
 
-  static associate(db) {}
+  static associate(db) {
+    db.Letter.hasMany(db.Mail);
+    db.Letter.hasMany(db.Keyword);
+  }
 }
 
 module.exports = Letter;

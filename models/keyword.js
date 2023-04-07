@@ -23,7 +23,9 @@ class Keyword extends Sequelize.Model {
     );
   }
 
-  static associate(db) {}
+  static associate(db) {
+    db.Keyword.belongsTo(db.Letter);
+  }
 }
 
 module.exports = Keyword;
