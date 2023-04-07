@@ -11,7 +11,7 @@ exports.join = async (req, res, next) => {
     if (exUser) {
       return res
         .status(409)
-        .json({ code: 409, meessage: "이미 존재하는 유저 아이디입니다." });
+        .json({ meessage: "이미 존재하는 유저 아이디입니다." });
       //이후에 중복확인 버튼도 만들자
     }
     const hash = await bcrypt.hash(password, 12);
@@ -20,7 +20,7 @@ exports.join = async (req, res, next) => {
       nick,
       password: hash,
     });
-    return res.json({ code: 200, message: "회원가입 성공" });
+    return res.json({ message: "회원가입 성공" });
   } catch (error) {
     console.error(error);
     return next(error);
@@ -30,31 +30,38 @@ exports.join = async (req, res, next) => {
 exports.login = (req, res, next) => {
   passport.authenticate("local", (error, user, info) => {
     if (error) {
-      console.error(err);
-      next(err);
+      console.error(error);
+      next(error);
     }
     if (!user) {
-      res.status(401).json({
-        message: info.meessage,
+      return res.status(401).json({
+        message: info,
       });
     }
     const refreshToken = jwt.sign(
-      { sub: "refresh", email: req.body.email },
+      { sub: "refresh", loginId: req.body.loginId },
       process.env.JWT_SECRET_OR_KEY,
       { expiresIn: "24h" }
     );
     const accessToken = jwt.sign(
-      { sub: "access", email: req.body.email },
+      { sub: "access", loginId: req.body.loginId },
       process.env.JWT_SECRET_OR_KEY,
       { expiresIn: "5m" }
     );
-    res.status(200).json({
-      nick: user.nick,
-      loginId: user.loginId,
-      accessToken,
-      refreshToken,
+    req.login(user, { session: false }, (loginError) => {
+      if (loginError) {
+        console.error(loginError);
+        next(loginError);
+      }
+      return res.status(200).json({
+        nick: user.nick,
+        loginId: user.loginId,
+        provider: user.provider,
+        accessToken,
+        refreshToken,
+      });
     });
-  });
+  })(req, res, next);
 };
 
 exports.logout = (req, res) => {

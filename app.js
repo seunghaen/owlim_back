@@ -47,7 +47,7 @@ app.use(
   })
 );
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 app.get("/sample", async (req, res, next) => {
   console.log("req.user", req.user);
   try {
