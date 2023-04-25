@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 
 exports.join = async (req, res, next) => {
   const { loginId, nick, password } = req.body;
-  console.log(req.body);
   try {
     const exUser = await User.findOne({ where: { loginId } });
     if (exUser) {
@@ -72,8 +71,13 @@ exports.logout = (req, res) => {
 
 exports.refreshToken = (req, res, next) => {
   passport.authenticate("refreshJwt", (err, user) => {
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "존재하지 않는 유저입니다", code: "not exist" });
+    }
     if (err) {
-      if ((err.name = "TokenExpiredError")) {
+      if (err.name === "TokenExpiredError") {
         return res
           .status(419)
           .json({ message: "만료된 리프레시 토큰입니다.", code: "expired" });

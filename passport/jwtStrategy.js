@@ -17,7 +17,6 @@ exports.jwt = () => {
           const exUser = await User.findOne({
             where: { loginId: jwtpayload.loginId },
           });
-          console.log(exUser);
           if (exUser) {
             return done(null, exUser);
           }
@@ -49,9 +48,7 @@ exports.refreshJwt = () => {
           const exUser = await User.findOne({
             where: { loginId: jwtpayload.loginId },
           });
-          if (exUser) {
-            return done(null, exUser);
-          }
+          return done(null, exUser);
         } catch {
           done(error);
         }
