@@ -8,6 +8,7 @@ const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 const cors = require("cors");
 const axios = require("axios");
+const { verifyRefreshToken } = require("./middlewares");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
@@ -48,18 +49,8 @@ app.use(
 );
 app.use(passport.initialize());
 // app.use(passport.session());
-app.get("/sample", async (req, res, next) => {
-  console.log("req.user", req.user);
-  try {
-    const result = await axios.get(
-      "https://www.googleapis.com/gmail/v1/users/me/messages?q=from:miricanvas@miricanvas.com",
-      { headers: { Authorization: `Bearer ${req.user.accessToken}` } }
-    );
-    console.log(result);
-    res.send("ㅎㅇ");
-  } catch (error) {
-    next(error);
-  }
+app.get("/sample", (req, res) => {
+  console.log(req.isAuthenticated());
 });
 app.use("/auth", authRouter);
 app.use((req, res, next) => {

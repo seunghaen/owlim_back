@@ -1,14 +1,15 @@
 const express = require("express");
-const passport = require("passport");
-const { login, join, logout } = require("../controllers/auth");
+const { login, join, logout, refreshToken } = require("../controllers/auth");
 const router = express.Router();
 const { isNotLoggedIn, isLoggedIn } = require("../middlewares");
 
-router.post("/join", isNotLoggedIn, join);
+router.post("/join", join);
 
-router.post("/login", isNotLoggedIn, login);
+router.post("/login", login);
 
-router.get("/logout", isLoggedIn, logout);
+router.get("/logout", logout);
+
+router.post("/refreshToken", refreshToken);
 
 //구글 로그인 일시중지
 // router.get(

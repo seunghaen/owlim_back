@@ -2,6 +2,7 @@ const passport = require("passport");
 const User = require("../models/user");
 const google = require("./googleStrategy.js");
 const local = require("./localStrategy");
+const { jwt, refreshJwt } = require("./jwtStrategy");
 
 module.exports = () => {
   //세션 방식은 일단 사용 중지하는 걸로
@@ -16,6 +17,8 @@ module.exports = () => {
   // });
 
   local();
+  jwt();
+  refreshJwt();
 
   // 구글로그인 일시중지
   // google();

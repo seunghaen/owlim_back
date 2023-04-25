@@ -20,7 +20,7 @@ exports.join = async (req, res, next) => {
       nick,
       password: hash,
     });
-    return res.json({ message: "회원가입 성공" });
+    return res.json({ code: 200, message: "회원가입 성공" });
   } catch (error) {
     console.error(error);
     return next(error);
@@ -70,24 +70,50 @@ exports.logout = (req, res) => {
   });
 };
 
-exports.loginSuccess = (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      error: false,
-      message: "Successfully Loged In",
-      user: {
-        nick: req.user.nick,
-        loginId: req.user.loginId,
-        provider: req.user.provider,
-      },
+exports.refreshToken = (req, res, next) => {
+  passport.authenticate("refreshJwt", (err, user) => {
+    if (err) {
+      if ((err.name = "TokenExpiredError")) {
+        return res
+          .status(419)
+          .json({ message: "만료된 리프레시 토큰입니다.", code: "expired" });
+      }
+      return res
+        .status(401)
+        .json({ message: "유효하지 않은 리프레시 토큰입니다." });
+    }
+    const accessToken = jwt.sign(
+      { sub: "access", loginId: user.loginId },
+      process.env.JWT_SECRET_OR_KEY,
+      { expiresIn: "5m" }
+    );
+    return res.status(200).json({
+      nick: user.nick,
+      loginId: user.loginId,
+      provider: user.provider,
+      accessToken,
     });
-  } else {
-    res.status(403).json({
-      user: null,
-    });
-  }
+  })(req, res, next);
 };
 
-exports.googleLoginCallback = (req, res, next) => {
-  res.redirect("http://localhost:3000");
-};
+// exports.loginSuccess = (req, res) => {
+//   if (req.user) {
+//     res.status(200).json({
+//       error: false,
+//       message: "Successfully Loged In",
+//       user: {
+//         nick: req.user.nick,
+//         loginId: req.user.loginId,
+//         provider: req.user.provider,
+//       },
+//     });
+//   } else {
+//     res.status(403).json({
+//       user: null,
+//     });
+//   }
+// };
+
+// exports.googleLoginCallback = (req, res, next) => {
+//   res.redirect("http://localhost:3000");
+// };
