@@ -9,6 +9,11 @@ class Letter extends Sequelize.Model {
           allowNull: false,
           unique: true,
         },
+        letterAddress: {
+          type: Sequelize.STRING(40),
+          allowNull: false,
+          unique: true,
+        },
       },
       {
         sequelize,

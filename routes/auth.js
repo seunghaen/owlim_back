@@ -1,7 +1,6 @@
 const express = require("express");
 const { login, join, logout, refreshToken } = require("../controllers/auth");
 const router = express.Router();
-const { isNotLoggedIn, isLoggedIn } = require("../middlewares");
 
 router.post("/join", join);
 

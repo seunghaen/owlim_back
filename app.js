@@ -7,11 +7,10 @@ const morgan = require("morgan");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 const cors = require("cors");
-const axios = require("axios");
-const { verifyRefreshToken } = require("./middlewares");
 dotenv.config();
 
 const authRouter = require("./routes/auth");
+const emailRouter = require("./routes/email");
 const passport = require("passport");
 const app = express();
 passportConfig();
@@ -51,6 +50,7 @@ app.use(passport.initialize());
 // app.use(passport.session());
 app.get("/sample", (req, res) => {});
 app.use("/auth", authRouter);
+app.use("/email", emailRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method},${req.url} 라우터 없음`);
   error.status = 404;

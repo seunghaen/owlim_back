@@ -5,9 +5,17 @@ class Mail extends Sequelize.Model {
     Mail.init(
       {
         title: {
-          type: Sequelize.STRING(15),
+          type: Sequelize.STRING(50),
           allowNull: false,
           unique: true,
+        },
+        html: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
+        from: {
+          type: Sequelize.STRING(20),
+          allowNull: true,
         },
       },
       {
