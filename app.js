@@ -11,6 +11,7 @@ dotenv.config();
 
 const authRouter = require("./routes/auth");
 const emailRouter = require("./routes/email");
+const letterRouter = require("./routes/letter");
 const passport = require("passport");
 const app = express();
 passportConfig();
@@ -32,6 +33,7 @@ sequelize
   });
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookeiParser(process.env.COOKIE_SECRET));
@@ -48,9 +50,12 @@ app.use(
 );
 app.use(passport.initialize());
 // app.use(passport.session());
-app.get("/sample", (req, res) => {});
+app.get("/sample", (req, res) => {
+  console.log(req.headers);
+});
 app.use("/auth", authRouter);
 app.use("/email", emailRouter);
+app.use("/letter", letterRouter);
 app.use((req, res, next) => {
   const error = new Error(`${req.method},${req.url} 라우터 없음`);
   error.status = 404;

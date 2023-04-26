@@ -4,15 +4,27 @@ class Letter extends Sequelize.Model {
   static initiate(sequelize) {
     Letter.init(
       {
-        title: {
+        name: {
           type: Sequelize.STRING(15),
           allowNull: false,
           unique: true,
         },
-        letterAddress: {
+        address: {
           type: Sequelize.STRING(40),
           allowNull: false,
           unique: true,
+        },
+        imgUrl: {
+          type: Sequelize.STRING(40),
+          allowNull: false,
+        },
+        type: {
+          type: Sequelize.STRING(10),
+          allowNull: false,
+        },
+        desc: {
+          type: Sequelize.STRING(100),
+          allowNull: false,
         },
       },
       {
