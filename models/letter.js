@@ -15,7 +15,7 @@ class Letter extends Sequelize.Model {
           unique: true,
         },
         imgUrl: {
-          type: Sequelize.STRING(40),
+          type: Sequelize.STRING(100),
           allowNull: false,
         },
         type: {

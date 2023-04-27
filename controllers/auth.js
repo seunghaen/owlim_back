@@ -56,6 +56,7 @@ exports.login = (req, res, next) => {
         nick: user.nick,
         loginId: user.loginId,
         provider: user.provider,
+        role: user.role,
         accessToken,
         refreshToken,
       });

@@ -26,6 +26,11 @@ class User extends Sequelize.Model {
           type: Sequelize.STRING(30),
           allowNull: true,
         },
+        role: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
       },
       {
         sequelize,
