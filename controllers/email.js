@@ -20,7 +20,6 @@ exports.receive = async (req, res, next) => {
       user.addMail(mail);
       if (letter) {
         letter.addMail(mail);
-      } else {
       }
     }
     res.status(200).json({
@@ -48,8 +47,27 @@ exports.getMailController = (req, res, next) => {
     }
     const mails = await user.getMails({
       attributes: ["title", "id", "from", "createdAt"],
+      include: "Letter",
     });
-    res.status(200).json({ mails });
+    let mailList = [];
+    mails.map(async (mail) => {
+      let letterName = null;
+      const createdDate = [
+        mail.createdAt.getFullYear(),
+        mail.createdAt.getMonth(),
+        mail.createdAt.getDay(),
+      ];
+      if (mail.Letter) {
+        letterName = mail.Letter.name;
+      }
+      mailList.push({
+        title: mail.title,
+        id: mail.id,
+        letterName,
+        createdDate,
+      });
+    });
+    res.status(200).json({ mailList });
   })(req, res, next);
 };
 
