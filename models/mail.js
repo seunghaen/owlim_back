@@ -9,7 +9,7 @@ class Mail extends Sequelize.Model {
           allowNull: false,
         },
         html: {
-          type: Sequelize.TEXT,
+          type: Sequelize.TEXT("long"),
           allowNull: false,
         },
         from: {
