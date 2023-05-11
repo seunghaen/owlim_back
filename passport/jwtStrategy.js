@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 exports.jwt = () => {
   passport.use(
-    "jwt",
+    "ajwt",
     new JWTStrategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,6 +20,7 @@ exports.jwt = () => {
           if (exUser) {
             return done(null, exUser);
           }
+          return done(null, false);
         } catch (error) {
           done(error);
         }

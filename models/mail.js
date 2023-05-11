@@ -7,7 +7,6 @@ class Mail extends Sequelize.Model {
         title: {
           type: Sequelize.STRING(50),
           allowNull: false,
-          unique: true,
         },
         html: {
           type: Sequelize.TEXT,
