@@ -31,7 +31,7 @@ exports.receive = async (req, res, next) => {
   }
 };
 
-exports.getMailTitle = (req, res, next) => {
+exports.getMailController = (req, res, next) => {
   passport.authenticate("ajwt", async (error, user) => {
     if (!user) {
       return res.status(401).json({
@@ -49,7 +49,30 @@ exports.getMailTitle = (req, res, next) => {
     const mails = await user.getMails({
       attributes: ["title", "id", "from", "createdAt"],
     });
-    console.log("mails", mails);
     res.status(200).json({ mails });
+  })(req, res, next);
+};
+
+exports.getMailHtmlController = (req, res, next) => {
+  passport.authenticate("ajwt", async (error, user) => {
+    if (!user) {
+      return res.status(401).json({
+        message: "존재하지 않는 유저입니다",
+        code: "not exist",
+      });
+    }
+    if (error) {
+      if (err.name == "TokenExpiredError") {
+        return res
+          .status(419)
+          .json({ message: "만료된 엑세스 토큰입니다.", code: "expired" });
+      }
+    }
+    console.log(req.params);
+    const mails = await user.getMails({
+      where: { id: req.params.id },
+      attributes: ["html"],
+    });
+    res.status(200).json({ html: mails[0].html });
   })(req, res, next);
 };
