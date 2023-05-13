@@ -6,6 +6,7 @@ const passport = require("passport");
 exports.receive = async (req, res, next) => {
   const { from, to, html, subject } = req.body;
   const address = from.split(" ")[1].slice(1, -1);
+  const sender = from.split(" ")[0];
   const targetId = to.split("@")[0].slice(1);
   console.log(address, targetId);
   try {
@@ -15,7 +16,8 @@ exports.receive = async (req, res, next) => {
       const mail = await Mail.create({
         title: subject,
         html,
-        from: address,
+        address,
+        sender,
       });
       user.addMail(mail);
       if (letter) {
@@ -46,7 +48,7 @@ exports.getMailController = (req, res, next) => {
       }
     }
     const mails = await user.getMails({
-      attributes: ["title", "id", "from", "createdAt"],
+      attributes: ["title", "id", "adress", "createdAt", "sender"],
       include: "Letter",
     });
     let mailList = [];
@@ -63,6 +65,8 @@ exports.getMailController = (req, res, next) => {
       mailList.push({
         title: mail.title,
         id: mail.id,
+        sender: mail.sender,
+        address: mail.address,
         letterName,
         createdDate,
       });

@@ -12,8 +12,12 @@ class Mail extends Sequelize.Model {
           type: Sequelize.TEXT("long"),
           allowNull: false,
         },
-        from: {
+        adress: {
           type: Sequelize.STRING(20),
+          allowNull: true,
+        },
+        sender: {
+          type: Sequelize.STRING(10),
           allowNull: true,
         },
       },
