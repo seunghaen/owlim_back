@@ -48,7 +48,7 @@ exports.getMailController = (req, res, next) => {
       }
     }
     const mails = await user.getMails({
-      attributes: ["title", "id", "adress", "createdAt", "sender"],
+      attributes: ["title", "id", "adress", "createdAt", "sender", "isread"],
       include: "Letter",
     });
     let mailList = [];
@@ -67,6 +67,7 @@ exports.getMailController = (req, res, next) => {
         id: mail.id,
         sender: mail.sender,
         address: mail.address,
+        isRead: mail.isread,
         letterName,
         createdDate,
       });

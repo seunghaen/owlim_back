@@ -20,6 +20,11 @@ class Mail extends Sequelize.Model {
           type: Sequelize.STRING(10),
           allowNull: true,
         },
+        isread: {
+          type: Sequelize.BOOLEAN(),
+          defaultValue: false,
+          allowNull: false,
+        },
       },
       {
         sequelize,
